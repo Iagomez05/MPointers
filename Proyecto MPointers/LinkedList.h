@@ -1,35 +1,35 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
-// Declaración adelantada de la clase MPointerGC
-template <typename T>
-class MPointer;
-
-// Clase plantilla LinkedList
 template <typename T>
 class LinkedList {
 public:
     // Estructura para representar un nodo
     struct Node {
-        T* mpointer;  // Cambiamos el puntero a T en vez de depender de MPointer
+        T* mpointer;
         Node* next;
     };
 
     // Constructor
     LinkedList() : head(nullptr) {}
 
-    // Destructor para liberar toda la memoria
-    ~LinkedList() {
-        clear();
+    // Obtener la cabeza de la lista
+    Node* getHead() const {
+        return head;
     }
 
-    // Añadir un elemento (un puntero de tipo T) a la lista
+    // Establecer una nueva cabeza de la lista
+    void setHead(Node* newHead) {
+        head = newHead;
+    }
+
+    // Añadir un MPointer a la lista
     void add(T* mpointer) {
         Node* newNode = new Node{mpointer, head};
         head = newNode;
     }
 
-    // Eliminar un elemento de la lista
+    // Eliminar un MPointer de la lista
     void remove(T* mpointer) {
         Node* current = head;
         Node* prev = nullptr;
@@ -49,7 +49,7 @@ public:
         }
     }
 
-    // Liberar todos los elementos de la lista
+    // Liberar todos los MPointer
     void clear() {
         Node* current = head;
         while (current != nullptr) {
@@ -59,11 +59,6 @@ public:
             delete toDelete;
         }
         head = nullptr;
-    }
-
-    // Devuelve la cabeza de la lista
-    Node* getHead() const {
-        return head;
     }
 
 private:
