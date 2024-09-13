@@ -7,4 +7,5 @@ add_executable(Proyecto_MPointers main.cpp
         MPointer.h
         MPointerGC.h
         LinkedList.h
+        DoublyLinkedList.h
 )

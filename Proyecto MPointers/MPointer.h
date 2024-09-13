@@ -1,7 +1,3 @@
-//
-// Created by joelg on 10/9/2024.
-//
-
 #ifndef MPOINTER_H
 #define MPOINTER_H
 
@@ -16,9 +12,12 @@ public:
     // Constructor por defecto
     MPointer() : memory(nullptr), id(++global_id), refCount(new int(1)) {
         std::cout << "MPointer::New() called, id: " << id << std::endl;
-        MPointerGC<T>::getInstance()->registerPointer(this);  // Registrar en el GC
     }
 
+    // Constructor que permite la inicialización con nullptr
+    MPointer(std::nullptr_t) : memory(nullptr), id(++global_id), refCount(new int(1)) {
+        std::cout << "MPointer initialized with nullptr, id: " << id << std::endl;
+    }
 
     // Constructor de copia
     MPointer(const MPointer& other) : memory(other.memory), id(other.id), refCount(other.refCount) {
@@ -32,9 +31,7 @@ public:
         if (memory) {
             (*refCount)--;
             if (*refCount == 0) {
-                MPointerGC<T>::getInstance()->unregisterPointer(this);  // Eliminar del GC
-                delete memory;
-                delete refCount;
+                MPointerGC<T>::getInstance()->releasePointer(id);
                 std::cout << "MPointer::memory deletion requested, id: " << id << std::endl;
             }
         }
@@ -43,6 +40,14 @@ public:
         return *this;
     }
 
+    // Sobrecarga del operador = para asignar valores a MPointer
+    MPointer& operator=(T value) {
+        if (!memory) {
+            memory = new T();
+        }
+        *memory = value;
+        return *this;
+    }
 
     // Operador de asignación
     MPointer& operator=(const MPointer& other) {
@@ -63,6 +68,20 @@ public:
         refCount = other.refCount;
         (*refCount)++;
         return *this;
+    }
+
+    // Operador de comparación con nullptr
+    bool operator==(std::nullptr_t) const {
+        return memory == nullptr;
+    }
+
+    bool operator!=(std::nullptr_t) const {
+        return memory != nullptr;
+    }
+
+    // Operador ! para verificar si un MPointer está vacío
+    bool operator!() const {
+        return memory == nullptr;
     }
 
     // Destructor
@@ -86,6 +105,17 @@ public:
     // Sobrecarga del operador -> para acceder a los miembros de T
     T* operator->() {
         return memory;
+    }
+
+    // Sobrecarga del operador != para comparar dos MPointers
+    bool operator!=(const MPointer<T>& other) const {
+        return this->memory != other.memory;
+    }
+
+
+    // Método para obtener el ID del MPointer
+    int getId() const {
+        return id;
     }
 
     // Método estático para crear un nuevo MPointer
