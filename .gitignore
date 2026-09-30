@@ -1,32 +1,36 @@
-# Prerequisites
-*.d
+# CMake output
+build/
+build-*/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+build.ninja
+.ninja_deps
+.ninja_log
 
-# Compiled Object files
-*.slo
-*.lo
+# Compiled artifacts
 *.o
 *.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
+*.a
+*.lib
 *.so
 *.dylib
 *.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
 *.exe
 *.out
 *.app
+
+# IDE and editor files
+.idea/
+.vscode/
+.vs/
+*.user
+
+# Runtime and operating system files
+*.log
+Testing/
+.DS_Store
+Thumbs.db
